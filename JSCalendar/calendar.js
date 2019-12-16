@@ -15,7 +15,7 @@ function Calendar()
     // 요일
     this.dayOfWeek = ["월", "화", "수", "목", "금", "토", "일"];
 
-    this.onCreate = function(dom, position)
+    this.onCreate = function(dom)
     {
         // exception Handling
         if(dom === null || dom === undefined || dom === NaN) return -1;
@@ -39,7 +39,11 @@ function Calendar()
                 this.years = date.getFullYear();
                 this.month = date.getMonth();
 
+                let divEl = document.createElement("div");
+                divEl.style.position = "absolute";
+
                 let tableEl = document.createElement("table");
+                divEl.appendChild(tableEl);
             
                 // 테이블 프레임잡기
                 tableEl.style.width = "50%";
@@ -47,15 +51,7 @@ function Calendar()
                 tableEl.style.textAlign = "center";
                 tableEl.className = "calendar" + this.serialNum;
                 tableEl.style.position = "absolute";
-
-                // 0이면 왼쪽으로, 1이면 우측으로 붙게 설정
-                if(position === 0)
-                {
-                    tableEl.style.left = 0;
-                }else
-                {
-                    tableEl.style.right = 0;
-                }
+                tableEl.style.top = 0;
                 
                 // 년/달 프레임
                 let headerEl = document.createElement("tr");
@@ -104,7 +100,7 @@ function Calendar()
                     this.nextObject = this.element.nextSibling;
                 }
 
-                this.nextObject.replaceWith(tableEl);
+                this.nextObject.replaceWith(divEl);
                 this.eventBinding();
 
                 // 해제 이벤트
@@ -207,10 +203,11 @@ function Calendar()
 
             aEl.addEventListener("click", function(event){
                 monthValue = this.month + 1;
+                dayValue = event.target.textContent;
                 if(monthValue < 10) monthValue = "0" + (this.month + 1);
-                if(event.target.textContent < 10) event.target.textContent = "0" + event.target.textContent;
+                if(dayValue < 10) dayValue = "0" + dayValue;
 
-                this.element.value = this.years + "-" + monthValue + "-" + event.target.textContent;
+                this.element.value = this.years + "-" + monthValue + "-" + dayValue;
             }.bind(this));
                 
 
